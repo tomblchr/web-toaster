@@ -47,8 +47,10 @@ namespace WebToaster
 
         public bool IsListening
         {
-            get { return listener.IsListening; }
-        }
+            get
+            {
+                return listener.IsListening;
+            }
 
         void Waiting(object state)
         {
