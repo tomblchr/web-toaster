@@ -9,13 +9,26 @@ namespace WebToaster
 {
     class RequestListener
     {
-        public static HttpListener listener = new HttpListener();
+        static HttpListener listener;
+        static object _lock = new object();
 
         public void Start(string[] prefixes = null)
         {
             try
             {
-                Stop();
+                if (IsListening) Stop();
+
+                if (listener == null)
+                {
+                    lock (_lock)
+                    {
+                        if (listener == null)
+                        {
+                            listener = new HttpListener();
+                        }
+                    }
+                }
+                
 
                 //netsh http add urlacl url=http://+:80/MyUri user=DOMAIN\user
                 if (prefixes == null)
@@ -38,10 +51,11 @@ namespace WebToaster
 
         public void Stop()
         {
-            if (listener.IsListening)
+            if (listener != null && listener.IsListening)
             {
                 listener.Stop();
                 listener.Close();
+                listener = null;
             }
         }
 
@@ -49,13 +63,13 @@ namespace WebToaster
         {
             get
             {
-                return listener.IsListening;
+                return listener != null && listener.IsListening;
             }
         }
 
         void Waiting(object state)
         {
-            while (listener.IsListening)
+            while (listener!= null && listener.IsListening)
             {
                 try
                 {

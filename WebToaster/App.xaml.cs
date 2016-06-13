@@ -14,7 +14,7 @@ namespace WebToaster
     /// </summary>
     public partial class App : Application
     {
-        RequestListener l = new RequestListener();
+        internal static RequestListener l = new RequestListener();
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -25,9 +25,9 @@ namespace WebToaster
 
         protected override void OnExit(ExitEventArgs e)
         {
-            base.OnExit(e);
-
             l.Stop();
+
+            base.OnExit(e);
         }
 
     }

@@ -28,6 +28,28 @@ namespace WebToaster
         public MainWindow()
         {
             InitializeComponent();
+            Sync();
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            if (App.l.IsListening)
+            {
+                App.l.Stop();
+            }
+            else
+            {
+                App.l.Start(new string[] { textBox.Text });
+            }
+            Sync();
+        }
+
+        void Sync()
+        {
+            textBox.IsEnabled = !App.l.IsListening;
+            button.Content = App.l.IsListening
+                ? "Stop"
+                : "Start";
         }
     }
 }
