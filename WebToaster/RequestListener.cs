@@ -51,6 +51,7 @@ namespace WebToaster
             {
                 return listener.IsListening;
             }
+        }
 
         void Waiting(object state)
         {
