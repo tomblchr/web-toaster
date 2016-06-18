@@ -12,9 +12,11 @@ namespace WebToaster
     {
         class CallInfo
         {
+            string _message;
+
             public CallInfo(NameValueCollection p)
             {
-                CallerID = "Unknown";
+                CallerID = PhoneNumber = string.Empty;
 
                 if (p.AllKeys.Contains("caller"))
                 {
@@ -24,6 +26,10 @@ namespace WebToaster
                 {
                     PhoneNumber = p["number"];
                 }
+                if (p.AllKeys.Contains("msg"))
+                {
+                    _message = p["msg"];
+                }
             }
 
             public string PhoneNumber;
@@ -31,7 +37,14 @@ namespace WebToaster
 
             public string Message
             {
-                get { return string.Format("Incoming Call: {0} ({1})", CallerID, PhoneNumber); }
+                get
+                { 
+                    if (string.IsNullOrEmpty(CallerID) && string.IsNullOrEmpty(PhoneNumber))
+                    {
+                        return _message;
+                    }
+                    return string.Format("Incoming Call: {0} ({1})", CallerID, PhoneNumber); 
+                }
             }
         }
 
