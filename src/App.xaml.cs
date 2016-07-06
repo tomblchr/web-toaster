@@ -14,18 +14,20 @@ namespace WebToaster
     /// </summary>
     public partial class App : Application
     {
-        internal static RequestListener l = new RequestListener();
+        internal static RequestListener listener = new RequestListener();
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            l.Start();
+            (new Notifier()).Register();
+
+            listener.Start();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
-            l.Stop();
+            listener.Stop();
 
             base.OnExit(e);
         }

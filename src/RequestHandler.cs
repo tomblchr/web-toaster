@@ -10,6 +10,10 @@ namespace WebToaster
 {
     static class RequestHandler
     {
+        //IServiceCollection
+        static object _lock = new object();
+        static List<INotificationProxy> _servicecollection = new List<INotificationProxy>();
+
         class CallInfo
         {
             string _message;
@@ -48,6 +52,19 @@ namespace WebToaster
             }
         }
 
+        public static void Register(this INotificationProxy proxy)
+        {
+            lock (_lock)
+            {
+                var existing = _servicecollection.Where(c => c.GetType() == proxy.GetType());
+                if (existing.Any())
+                {
+                    existing.ToList().ForEach(c => _servicecollection.Remove(c));
+                }
+                _servicecollection.Add(proxy);
+            }
+        }
+
         public static void ListenerCallback(IAsyncResult result)
         {
             HttpListener l = (HttpListener)result.AsyncState;
@@ -55,9 +72,8 @@ namespace WebToaster
             if (l.IsListening)
             {
                 var context = l.EndGetContext(result);
-                Notifier n = new Notifier();
                 CallInfo c = new CallInfo(context.Request.QueryString);
-                n.PopUp(c.Message);
+                _servicecollection.ForEach(s => s.Send(c.Message));
                 context.Response.Close();
             }
         }

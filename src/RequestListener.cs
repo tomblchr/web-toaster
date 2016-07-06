@@ -27,8 +27,7 @@ namespace WebToaster
                             listener = new HttpListener();
                         }
                     }
-                }
-                
+                }                
 
                 //netsh http add urlacl url=http://+:80/MyUri user=DOMAIN\user
                 if (prefixes == null)

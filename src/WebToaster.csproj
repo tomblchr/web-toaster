@@ -64,9 +64,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="INotificationProxy.cs" />
     <Compile Include="Notifier.cs" />
     <Compile Include="RequestHandler.cs" />
     <Compile Include="RequestListener.cs" />
+    <Compile Include="SlackProxy.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

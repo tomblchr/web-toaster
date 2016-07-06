@@ -33,23 +33,34 @@ namespace WebToaster
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            if (App.l.IsListening)
+            if (App.listener.IsListening)
             {
-                App.l.Stop();
+                App.listener.Stop();
             }
             else
             {
-                App.l.Start(new string[] { textBox.Text });
+                App.listener.Start(new string[] { textBox.Text });
             }
             Sync();
         }
 
         void Sync()
         {
-            textBox.IsEnabled = !App.l.IsListening;
-            button.Content = App.l.IsListening
+            textBox.IsEnabled = !App.listener.IsListening;
+            button.Content = App.listener.IsListening
                 ? "Stop"
                 : "Start";
+        }
+
+        private void checkBox_Checked(object sender, RoutedEventArgs e)
+        {
+            textBoxSlackEndPoint.IsEnabled = ((CheckBox)sender).IsChecked.HasValue && ((CheckBox)sender).IsChecked.Value;
+            if (textBoxSlackEndPoint.IsEnabled)
+            {
+                SlackProxy p = new SlackProxy();
+                p.Uri = textBoxSlackEndPoint.Text;
+                p.Register();
+            }
         }
     }
 }

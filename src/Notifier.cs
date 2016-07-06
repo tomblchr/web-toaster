@@ -8,9 +8,9 @@ using Windows.UI.Notifications;
 
 namespace WebToaster
 {
-    class Notifier
+    class Notifier : INotificationProxy
     {
-        public void PopUp(string message)
+        public void Send(string message)
         {
             ToastContent content = new ToastContent()
             {
